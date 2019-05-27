@@ -48,7 +48,7 @@ public class VoteService extends HttpBaseService{
 	    List<NameValuePair> params = new ArrayList<NameValuePair>();
 	    params.add(new BasicNameValuePair(VOTE_DATA, VOTE_DATA));
 	    
-	    IPInfo ipInfo = new IPInfo("59.42.42.209", 8118);
+	    IPInfo ipInfo = new IPInfo("112.85.165.186", 9999);
 	    
 	    return doPostWithForm(url, headers, ipInfo, params);
 	    
