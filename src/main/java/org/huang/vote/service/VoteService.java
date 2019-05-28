@@ -6,14 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.huang.vote.model.IPInfo;
-import org.json.JSONObject;
 
 public class VoteService extends HttpBaseService{
 
@@ -24,7 +21,7 @@ public class VoteService extends HttpBaseService{
 	
 	private static final String VOTE_DATA = "320000_5ce14aa4ba093d4053485392";
 	
-	public HttpResponse doVote() throws ParseException, IOException {
+	public HttpResponse doVote(IPInfo ipInfo) throws ParseException, IOException {
 		
 	    String accept = "*/*";
 	    String baseUrl = "http://op.lottery.gov.cn/";
@@ -48,40 +45,36 @@ public class VoteService extends HttpBaseService{
 	    List<NameValuePair> params = new ArrayList<NameValuePair>();
 	    params.add(new BasicNameValuePair(VOTE_DATA, VOTE_DATA));
 	    
-	    IPInfo ipInfo = new IPInfo("112.85.165.186", 9999);
-	    
 	    return doPostWithForm(url, headers, ipInfo, params);
-	    
-	    
 	}
 	
-	public static void main(String[] args) {
-		VoteService service = new VoteService();
+//	public static void main(String[] args) {
+//		VoteService service = new VoteService();
+//		
+//		while(true) {
+//			try {
+//				HttpResponse response = service.doVote();
+//				
+//				if (response != null){
+//		            HttpEntity entity = response.getEntity();  //获取返回实体
+//		            if (entity != null){
+//		            	String result = EntityUtils.toString(entity,"utf-8");
+//		            	JSONObject o = new JSONObject(result);
+//		            	int status = o.getInt("status");
+////		            	if(200 != status) {
+////		            		break;
+////		            	}
+//		                System.out.println(result);
+//		            }
+//		        }
+//				
+//				Thread.sleep(1000*30);
+//			} catch (ParseException | IOException | InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
-		while(true) {
-			try {
-				HttpResponse response = service.doVote();
-				
-				if (response != null){
-		            HttpEntity entity = response.getEntity();  //获取返回实体
-		            if (entity != null){
-		            	String result = EntityUtils.toString(entity,"utf-8");
-		            	JSONObject o = new JSONObject(result);
-		            	int status = o.getInt("status");
-//		            	if(200 != status) {
-//		            		break;
-//		            	}
-		                System.out.println(result);
-		            }
-		        }
-				
-				Thread.sleep(1000*30);
-			} catch (ParseException | IOException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		
-		
-	}
+//	}
 }
