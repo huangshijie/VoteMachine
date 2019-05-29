@@ -63,7 +63,7 @@
 		      </descriptorRefs>
 		      <archive>
 		         <manifest>
-		            <mainClass>org.huang.utils.VoteUtil</mainClass>
+		            <mainClass>org.huang.vote.App</mainClass>
 		         </manifest>
 		      </archive>
 		   </configuration>
