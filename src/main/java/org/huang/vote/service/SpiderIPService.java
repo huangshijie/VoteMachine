@@ -1,5 +1,7 @@
 package org.huang.vote.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfo;
 import org.huang.vote.model.IPInfoStore;
 import org.jsoup.Jsoup;
@@ -8,6 +10,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class SpiderIPService extends HttpBaseService{
+	
+	private static final Logger logger = LogManager.getLogger(SpiderIPService.class) ;
+	
 	private volatile IPInfoStore store;
 	private String url;
 	private String charset;
@@ -53,7 +58,7 @@ public class SpiderIPService extends HttpBaseService{
         String port="8888";
 		
 		for (Element trEle : classEmpty) {
-            //System.out.println(trEle.toString());
+            //logger.info(trEle.toString());
             Elements tds = trEle.select("td");
 
             //if it not a efficient ipPort entry
@@ -61,32 +66,32 @@ public class SpiderIPService extends HttpBaseService{
             ip = tds.get(1).text();
             port = trEle.select("td").get(2).text();
             String tempIP = ip + " " + port;
-            //System.out.println("ipPort: " + ip + " port: "+port);
+            //logger.info("ipPort: " + ip + " port: "+port);
             if(store.getIpPortQueue().contains(tempIP)){
-                System.out.println("xiciIp: check the repeating ipPort....");
+                logger.info("xiciIp: check the repeating ipPort....");
                 continue;
             }
 
             //the synchronized to ipPort
             synchronized (store) {
                 if (store.getIpPortQueue().size() >= 20) {
-                    System.out.println("xiciIP producer wait...");
+                    logger.info("xiciIP producer wait...");
                     try {
                     	store.wait(); // the wait must in synchronized code
-                        System.out.println("xiciIP producer waking...");
+                        logger.info("xiciIP producer waking...");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                System.out.println("xiciIP: before produce "+ store.getIpPortQueue().size());
+                logger.info("xiciIP: before produce "+ store.getIpPortQueue().size());
                 if (store.getIpPortQueue().size() < 20) store.getIpPortQueue().add(new IPInfo(ip, Integer.valueOf(port)));// add to queue
-                System.out.println("xiciIP: after produce "+ store.getIpPortQueue().size()+"\n");
+                logger.info("xiciIP: after produce "+ store.getIpPortQueue().size()+"\n");
                 store.notifyAll();
             }
         }
-        System.out.println("xiciIP -> IpPortQueue's size is: "+store.getIpPortQueue().size());
+        logger.info("xiciIP -> IpPortQueue's size is: "+store.getIpPortQueue().size());
 		
-		System.out.println(content);
+		logger.info(content);
 	}
 	
 	public static void main(String[] args) {

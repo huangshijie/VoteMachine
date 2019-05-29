@@ -6,6 +6,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfo;
 import org.huang.vote.model.IPInfoStore;
 import org.huang.vote.service.UtilsService;
@@ -14,10 +16,10 @@ import org.json.JSONObject;
 
 public class Consumer implements Runnable{
 	
+	private static final Logger logger = LogManager.getLogger(Consumer.class) ;
+	
 	private VoteService service;
-	
 	private volatile IPInfoStore store;
-	
 	private IPInfo ipInfo;
 	
 	public VoteService getService() {
@@ -50,26 +52,26 @@ public class Consumer implements Runnable{
 				if(this.getStore().getIpPortQueue().size() == 0) {
 					
 					try {
-						System.out.println("Consumer wait...");
+						logger.info("Consumer wait...");
 						this.getStore().wait();
-						System.out.println("Consumer waking...");
+						logger.info("Consumer waking...");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				
-				if( this.ipInfo == null ){
-					synchronized(this) {
-		    			do {
-		    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-		    			} while (!UtilsService.isValidIpPort(ipInfo));
-		    			System.out.println("Current IpInfo is null After consume: "+ this.getStore().getIpPortQueue().size());
-		    		}
-				}
+//				
+//				if( this.ipInfo == null ){
+//					synchronized(this) {
+//		    			do {
+//		    				this.ipInfo = this.getStore().getIpPortQueue().poll();
+//		    			} while (!UtilsService.isValidIpPort(ipInfo));
+//		    			logger.info("Current IpInfo is null After consume: "+ this.getStore().getIpPortQueue().size());
+//		    		}
+//				}
 				
 				if(this.getStore().getIpPortQueue().size() > 0) {
-					System.out.println("Before consume: "+ this.getStore().getIpPortQueue().size());
+					logger.info("Before consume: "+ this.getStore().getIpPortQueue().size());
 					
 					if(this.getStore().getIpPortQueue().size() < 10 ) this.getStore().notifyAll();
 					
@@ -87,10 +89,10 @@ public class Consumer implements Runnable{
 						    			do {
 						    				this.ipInfo = this.getStore().getIpPortQueue().poll();
 						    			} while (! UtilsService.isValidIpPort(ipInfo));
-						    			System.out.println("After consume: "+ this.getStore().getIpPortQueue().size());
+						    			logger.info("After consume: "+ this.getStore().getIpPortQueue().size());
 						    		}
 						    	}
-						        System.out.println(result);
+						        logger.info(result);
 						    }
 						}
 					} catch (ParseException | IOException e) {
@@ -99,7 +101,7 @@ public class Consumer implements Runnable{
 			    			do {
 			    				this.ipInfo = this.getStore().getIpPortQueue().poll();
 			    			} while (! UtilsService.isValidIpPort(ipInfo));
-			    			System.out.println("Exception After consume: "+ this.getStore().getIpPortQueue().size());
+			    			logger.info("Exception After consume: "+ this.getStore().getIpPortQueue().size());
 			    		}
 						
 						e.printStackTrace();

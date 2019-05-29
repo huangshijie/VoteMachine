@@ -23,10 +23,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfo;
 
 public abstract class HttpBaseService implements BaseService {
-
+	
 	public HttpResponse doPostWithForm(String url, Map<String, String> headers, IPInfo ipInfo,
 			List<NameValuePair> params) throws ClientProtocolException, IOException {
 

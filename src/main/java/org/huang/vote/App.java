@@ -1,5 +1,7 @@
 package org.huang.vote;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfoStore;
 import org.huang.vote.service.SpiderIPService;
 import org.huang.vote.service.VoteService;
@@ -7,7 +9,12 @@ import org.huang.vote.service.consumer.Consumer;
 import org.huang.vote.service.producer.Producer;
 
 public class App {
+	
+	private static final Logger logger = LogManager.getLogger(App.class) ;
+	
     public static void main( String[] args ) {
+    	
+    	logger.info("Start App");
     	IPInfoStore store = new IPInfoStore();
     	
     	SpiderIPService sService = new SpiderIPService(store, "http://www.xicidaili.com/nn/1", "utf-8");

@@ -9,13 +9,16 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfo;
 
 public class UtilsService extends HttpBaseService{
 	
+	private static final Logger logger = LogManager.getLogger(UtilsService.class) ;
 	
 	public static boolean isValidIpPort(IPInfo ipInfo) {
-		System.out.println("Start Test " + ipInfo.getIp()+ ":"+ipInfo.getPort());
+		logger.info("Start Test " + ipInfo.getIp()+ ":"+ipInfo.getPort());
 		HttpGet httpGet = new HttpGet("https://www.baidu.com");
 		CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpHost proxy = new HttpHost(ipInfo.getIp(), ipInfo.getPort());
