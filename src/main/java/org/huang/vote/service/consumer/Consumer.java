@@ -18,6 +18,8 @@ public class Consumer implements Runnable{
 	
 	private volatile IPInfoStore store;
 	
+	private IPInfo ipInfo;
+	
 	public VoteService getService() {
 		return service;
 	}
@@ -31,6 +33,11 @@ public class Consumer implements Runnable{
 	}
 
 	public void setStore(IPInfoStore store) {
+		this.store = store;
+	}
+	
+	public Consumer(VoteService service, IPInfoStore store) {
+		this.service = service;
 		this.store = store;
 	}
 
@@ -53,6 +60,16 @@ public class Consumer implements Runnable{
 				}
 			}
 			
+			if( this.ipInfo == null ){
+				synchronized(this) {
+	    			do {
+	    				this.ipInfo = this.getStore().getIpPortQueue().poll();
+	    			} while (UtilsService.isValidIpPort(ipInfo));
+	    			System.out.println("Current IpInfo is null After consume: "+ this.getStore().getIpPortQueue().size());
+	    		}
+			}
+			
+			
 			if(this.getStore().getIpPortQueue().size() > 0) {
 				System.out.println("Before consume: "+ this.getStore().getIpPortQueue().size());
 				
@@ -70,7 +87,7 @@ public class Consumer implements Runnable{
 					    	if(200 != status) {
 					    		synchronized(this) {
 					    			do {
-					    				ipInfo = this.getStore().getIpPortQueue().poll();
+					    				this.ipInfo = this.getStore().getIpPortQueue().poll();
 					    			} while (UtilsService.isValidIpPort(ipInfo));
 					    			System.out.println("After consume: "+ this.getStore().getIpPortQueue().size());
 					    		}
