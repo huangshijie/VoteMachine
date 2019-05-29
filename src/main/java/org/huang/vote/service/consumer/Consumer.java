@@ -109,7 +109,7 @@ public class Consumer implements Runnable{
 			}
 			
 			try {
-                Thread.sleep(1000*15);
+                Thread.sleep(1000*30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

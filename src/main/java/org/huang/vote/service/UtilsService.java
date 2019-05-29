@@ -14,11 +14,10 @@ import org.huang.vote.model.IPInfo;
 public class UtilsService extends HttpBaseService{
 	
 	
-	private static CloseableHttpClient httpClient = HttpClients.createDefault();
-	
 	public static boolean isValidIpPort(IPInfo ipInfo) {
-		
-		HttpGet httpGet = new HttpGet("www.baidu.com");
+		System.out.println("Start Test " + ipInfo.getIp()+ ":"+ipInfo.getPort());
+		HttpGet httpGet = new HttpGet("https://www.baidu.com");
+		CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpHost proxy = new HttpHost(ipInfo.getIp(), ipInfo.getPort());
 
         RequestConfig config = RequestConfig
@@ -36,6 +35,7 @@ public class UtilsService extends HttpBaseService{
             response = httpClient.execute(httpGet);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
         HttpEntity entity = response.getEntity();
         
