@@ -1,21 +1,20 @@
 package org.huang.vote.service.producer;
 
-import org.huang.vote.model.IPInfoStore;
 import org.huang.vote.service.SpiderIPService;
 
 public class Producer implements Runnable{
 
-	private volatile IPInfoStore store;
+	// private volatile IPInfoStore store;
 
 	private SpiderIPService service;
 	
-	public IPInfoStore getStore() {
-		return store;
-	}
-
-	public void setStore(IPInfoStore store) {
-		this.store = store;
-	}
+//	public IPInfoStore getStore() {
+//		return store;
+//	}
+//
+//	public void setStore(IPInfoStore store) {
+//		this.store = store;
+//	}
 
 	public SpiderIPService getService() {
 		return service;
@@ -25,8 +24,10 @@ public class Producer implements Runnable{
 		this.service = service;
 	}
 	
-	public Producer(IPInfoStore store, SpiderIPService service) {
-		this.store = store;
+	public Producer(
+			// IPInfoStore store, 
+			SpiderIPService service) {
+		// this.store = store;
 		this.service = service;
 	}
 	
@@ -51,4 +52,4 @@ public class Producer implements Runnable{
 
 	
 	
-}
+} 

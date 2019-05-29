@@ -46,60 +46,73 @@ public class Consumer implements Runnable{
 		// TODO Auto-generated method stub
 		while(true) {
 			
-			IPInfo ipInfo = null;
-			
-			if(this.getStore().getIpPortQueue().size() == 0) {
-				
-				try {
-					System.out.println("Consumer wait...");
-					this.getStore().wait();
-					System.out.println("Consumer waking...");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			if( this.ipInfo == null ){
-				synchronized(this) {
-	    			do {
-	    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-	    			} while (UtilsService.isValidIpPort(ipInfo));
-	    			System.out.println("Current IpInfo is null After consume: "+ this.getStore().getIpPortQueue().size());
-	    		}
-			}
-			
-			
-			if(this.getStore().getIpPortQueue().size() > 0) {
-				System.out.println("Before consume: "+ this.getStore().getIpPortQueue().size());
-				
-				if(this.getStore().getIpPortQueue().size() < 10 ) this.getStore().notifyAll();
-				
-				try {
-					HttpResponse response = service.doVote(ipInfo);
-
-					if (response != null){
-					    HttpEntity entity = response.getEntity();  //获取返回实体
-					    if (entity != null){
-					    	String result = EntityUtils.toString(entity,"utf-8");
-					    	JSONObject o = new JSONObject(result);
-					    	int status = o.getInt("status");
-					    	if(200 != status) {
-					    		synchronized(this) {
-					    			do {
-					    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-					    			} while (UtilsService.isValidIpPort(ipInfo));
-					    			System.out.println("After consume: "+ this.getStore().getIpPortQueue().size());
-					    		}
-					    	}
-					        System.out.println(result);
-					    }
+			synchronized(this.getStore()) {
+				if(this.getStore().getIpPortQueue().size() == 0) {
+					
+					try {
+						System.out.println("Consumer wait...");
+						this.getStore().wait();
+						System.out.println("Consumer waking...");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (ParseException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
+				
+				if( this.ipInfo == null ){
+					synchronized(this) {
+		    			do {
+		    				this.ipInfo = this.getStore().getIpPortQueue().poll();
+		    			} while (!UtilsService.isValidIpPort(ipInfo));
+		    			System.out.println("Current IpInfo is null After consume: "+ this.getStore().getIpPortQueue().size());
+		    		}
+				}
+				
+				if(this.getStore().getIpPortQueue().size() > 0) {
+					System.out.println("Before consume: "+ this.getStore().getIpPortQueue().size());
+					
+					if(this.getStore().getIpPortQueue().size() < 10 ) this.getStore().notifyAll();
+					
+					try {
+						HttpResponse response = service.doVote(ipInfo);
+
+						if (response != null){
+						    HttpEntity entity = response.getEntity();  //获取返回实体
+						    if (entity != null){
+						    	String result = EntityUtils.toString(entity,"utf-8");
+						    	JSONObject o = new JSONObject(result);
+						    	int status = o.getInt("status");
+						    	if(200 != status) {
+						    		synchronized(this) {
+						    			do {
+						    				this.ipInfo = this.getStore().getIpPortQueue().poll();
+						    			} while (! UtilsService.isValidIpPort(ipInfo));
+						    			System.out.println("After consume: "+ this.getStore().getIpPortQueue().size());
+						    		}
+						    	}
+						        System.out.println(result);
+						    }
+						}
+					} catch (ParseException | IOException e) {
+
+						synchronized(this) {
+			    			do {
+			    				this.ipInfo = this.getStore().getIpPortQueue().poll();
+			    			} while (! UtilsService.isValidIpPort(ipInfo));
+			    			System.out.println("Exception After consume: "+ this.getStore().getIpPortQueue().size());
+			    		}
+						
+						e.printStackTrace();
+					}
+				}
+				
 			}
+			
+			try {
+                Thread.sleep(1000*15);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 		} 
 	}
 
