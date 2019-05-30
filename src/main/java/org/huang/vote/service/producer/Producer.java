@@ -1,9 +1,12 @@
 package org.huang.vote.service.producer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.huang.vote.service.SpiderIPService;
 
 public class Producer implements Runnable{
 
+	private static final Logger logger = LogManager.getLogger(Producer.class);
 	// private volatile IPInfoStore store;
 
 	private SpiderIPService service;
@@ -41,7 +44,7 @@ public class Producer implements Runnable{
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}

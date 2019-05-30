@@ -55,7 +55,7 @@ public class Consumer implements Runnable{
 						this.getStore().wait();
 						logger.info("Consumer waking...");
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						logger.error(e.getMessage(), e);
 					}
 				}
 				
@@ -71,6 +71,7 @@ public class Consumer implements Runnable{
 						    HttpEntity entity = response.getEntity();  //获取返回实体
 						    if (entity != null){
 						    	String result = EntityUtils.toString(entity,"utf-8");
+						    	logger.info(result);
 						    	JSONObject o = new JSONObject(result);
 						    	int status = o.getInt("status");
 						    	if(200 != status) {
@@ -92,8 +93,7 @@ public class Consumer implements Runnable{
 			    			} while (! UtilsService.isValidIpPort(ipInfo) || this.getStore().getIpPortQueue().size() != 0);
 			    			logger.info("Exception After consume: "+ this.getStore().getIpPortQueue().size());
 			    		}
-						
-						e.printStackTrace();
+						logger.error(e.getMessage(), e);
 					}
 				}
 				
@@ -102,7 +102,7 @@ public class Consumer implements Runnable{
 			try {
                 Thread.sleep(1000*30);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 		} 
 	}

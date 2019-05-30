@@ -65,8 +65,8 @@ public class SpiderIPService extends HttpBaseService{
             if(tds.size()<2)    continue;
             ip = tds.get(1).text();
             port = trEle.select("td").get(2).text();
-            String tempIP = ip + " " + port;
-            //logger.info("ipPort: " + ip + " port: "+port);
+            IPInfo tempIP = new IPInfo(ip, Integer.valueOf(port));
+            logger.info("Got new ipPort: " + ip + " port: "+port);
             if(store.getIpPortQueue().contains(tempIP)){
                 logger.info("xiciIp: check the repeating ipPort....");
                 continue;
@@ -80,7 +80,7 @@ public class SpiderIPService extends HttpBaseService{
                     	store.wait(); // the wait must in synchronized code
                         logger.info("xiciIP producer waking...");
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    	logger.error(e.getMessage(), e);
                     }
                 }
                 logger.info("xiciIP: before produce "+ store.getIpPortQueue().size());

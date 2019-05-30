@@ -29,6 +29,8 @@ import org.huang.vote.model.IPInfo;
 
 public abstract class HttpBaseService implements BaseService {
 	
+	private static final Logger logger = LogManager.getLogger(HttpBaseService.class);
+	
 	public HttpResponse doPostWithForm(String url, Map<String, String> headers, IPInfo ipInfo,
 			List<NameValuePair> params) throws ClientProtocolException, IOException {
 
@@ -71,9 +73,9 @@ public abstract class HttpBaseService implements BaseService {
 			mac = Mac.getInstance(algorithm);
 			mac.init(key);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (InvalidKeyException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return byteArrayToHex(mac.doFinal(loginname.getBytes()));
 	}
@@ -110,14 +112,14 @@ public abstract class HttpBaseService implements BaseService {
 		try {
 			response = httpClient.execute(httpGet);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		HttpEntity entity = response.getEntity();
 
 		try {
 			jsonContent = EntityUtils.toString(entity, charset);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return jsonContent;
 	}

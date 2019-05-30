@@ -38,7 +38,7 @@ public class UtilsService extends HttpBaseService{
 	        try {
 	            response = httpClient.execute(httpGet);
 	        } catch (IOException e) {
-	            e.printStackTrace();
+	        	logger.error(e.getMessage(), e);
 	            return false;
 	        }
 	        HttpEntity entity = response.getEntity();
