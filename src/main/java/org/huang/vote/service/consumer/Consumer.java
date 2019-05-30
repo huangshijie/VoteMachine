@@ -45,7 +45,6 @@ public class Consumer implements Runnable{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while(true) {
 			
 			synchronized(this.getStore()) {
@@ -56,19 +55,9 @@ public class Consumer implements Runnable{
 						this.getStore().wait();
 						logger.info("Consumer waking...");
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-//				
-//				if( this.ipInfo == null ){
-//					synchronized(this) {
-//		    			do {
-//		    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-//		    			} while (!UtilsService.isValidIpPort(ipInfo));
-//		    			logger.info("Current IpInfo is null After consume: "+ this.getStore().getIpPortQueue().size());
-//		    		}
-//				}
 				
 				if(this.getStore().getIpPortQueue().size() > 0) {
 					logger.info("Before consume: "+ this.getStore().getIpPortQueue().size());
@@ -88,7 +77,7 @@ public class Consumer implements Runnable{
 						    		synchronized(this) {
 						    			do {
 						    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-						    			} while (! UtilsService.isValidIpPort(ipInfo));
+						    			} while (! UtilsService.isValidIpPort(ipInfo) || this.getStore().getIpPortQueue().size() != 0);
 						    			logger.info("After consume: "+ this.getStore().getIpPortQueue().size());
 						    		}
 						    	}
@@ -100,7 +89,7 @@ public class Consumer implements Runnable{
 						synchronized(this) {
 			    			do {
 			    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-			    			} while (! UtilsService.isValidIpPort(ipInfo));
+			    			} while (! UtilsService.isValidIpPort(ipInfo) || this.getStore().getIpPortQueue().size() != 0);
 			    			logger.info("Exception After consume: "+ this.getStore().getIpPortQueue().size());
 			    		}
 						
