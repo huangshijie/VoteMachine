@@ -77,8 +77,14 @@ public class Consumer implements Runnable{
 						    	if(200 != status) {
 						    		synchronized(this) {
 						    			do {
+						    				logger.info("Before Consume change ip: "+ this.getStore().getIpPortQueue().size());
+						    				
+						    				if (this.getStore().getIpPortQueue().size() <= 0) {
+						    					logger.info("IPInfo's ip store is too small");
+						    					break;
+						    				}
 						    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-						    			} while (! UtilsService.isValidIpPort(ipInfo) || this.getStore().getIpPortQueue().size() != 0);
+						    			} while (! UtilsService.isValidIpPort(ipInfo));
 						    			logger.info("After consume: "+ this.getStore().getIpPortQueue().size());
 						    		}
 						    	}
@@ -89,8 +95,15 @@ public class Consumer implements Runnable{
 
 						synchronized(this) {
 			    			do {
+			    				logger.info("Before Exception change ip: "+ this.getStore().getIpPortQueue().size());
+			    				
+			    				if (this.getStore().getIpPortQueue().size() <= 0) {
+			    					logger.info("IPInfo's ip store is too small");
+			    					break;
+			    				}
+			    				
 			    				this.ipInfo = this.getStore().getIpPortQueue().poll();
-			    			} while (! UtilsService.isValidIpPort(ipInfo) || this.getStore().getIpPortQueue().size() != 0);
+			    			} while (! UtilsService.isValidIpPort(ipInfo));
 			    			logger.info("Exception After consume: "+ this.getStore().getIpPortQueue().size());
 			    		}
 						logger.error(e.getMessage(), e);

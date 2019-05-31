@@ -21,11 +21,11 @@ public class App {
     	VoteService vService = new VoteService();
     	
     	Consumer consumer = new Consumer(vService, store);
-    	Thread conThread = new Thread(consumer);
+    	Thread conThread = new Thread(consumer, "Consumer");
     	conThread.start();
     	
     	Producer producer = new Producer(sService);
-    	Thread proThread = new Thread(producer);
+    	Thread proThread = new Thread(producer, "Producer");
     	proThread.start();
     	
     }

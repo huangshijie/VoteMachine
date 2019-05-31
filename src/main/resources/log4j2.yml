@@ -25,7 +25,7 @@ Configuration:
     logger:
       name: EventLogger
       level: info
-      additivity: false
+      additivity: true
       AppenderRef:
         ref: File
 
