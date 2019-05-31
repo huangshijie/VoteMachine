@@ -54,8 +54,13 @@ public abstract class HttpBaseService implements BaseService {
 	
 			if (ipInfo != null) {
 				HttpHost proxy = new HttpHost(ipInfo.getIp(), ipInfo.getPort());
-				RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).setConnectTimeout(10000)
-						.setSocketTimeout(10000).setConnectionRequestTimeout(3000).build();
+				RequestConfig requestConfig = RequestConfig
+						.custom()
+						.setProxy(proxy)
+						.setConnectTimeout(50000)
+						.setSocketTimeout(50000)
+						.setConnectionRequestTimeout(5000)
+						.build();
 				httpPost.setConfig(requestConfig);
 			}
 		

@@ -32,8 +32,8 @@ public class UtilsService extends HttpBaseService{
 		        RequestConfig config = RequestConfig
 		                .custom()
 		                .setProxy(proxy)
-		                .setConnectTimeout(1000)
-		                .setSocketTimeout(1000)
+		                .setConnectTimeout(5000)
+		                .setSocketTimeout(5000)
 		                .build();
 		        httpGet.setConfig(config);
 		        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0");
