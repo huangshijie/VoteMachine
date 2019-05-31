@@ -24,7 +24,7 @@ public class UtilsService extends HttpBaseService{
 		
 		if(ipInfo != null) {
 			logger.info("Start Test " + ipInfo.getIp()+ ":"+ipInfo.getPort());
-			HttpGet httpGet = new HttpGet("https://www.baidu.com");
+			HttpGet httpGet = new HttpGet("https://www.douban.com/");
 			
 			try (CloseableHttpClient httpClient = HttpClients.createDefault();) {
 		        HttpHost proxy = new HttpHost(ipInfo.getIp(), ipInfo.getPort());
