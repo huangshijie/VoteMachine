@@ -67,6 +67,8 @@ public abstract class HttpBaseService implements BaseService {
 			
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+			
+			return null;
 		}
 		
 		return result;

@@ -82,6 +82,10 @@ public class Consumer implements Runnable {
 								}
 							}
 							logger.info(result);
+						} else {
+							
+							throw new RuntimeException("HTTP Base Service Error");
+							
 						}
 					} catch (ParseException | IOException e) {
 
