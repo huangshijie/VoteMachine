@@ -109,7 +109,8 @@ public class Consumer implements Runnable{
 						logger.error(e.getMessage(), e);
 					}
 				}
-				
+
+				this.getStore().notifyAll();
 			}
 			
 			try {
