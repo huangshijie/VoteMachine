@@ -87,7 +87,7 @@ public class Consumer implements Runnable {
 							throw new RuntimeException("HTTP Base Service Error");
 							
 						}
-					} catch (ParseException | IOException e) {
+					} catch (RuntimeException | IOException e) {
 
 						logger.error(e.getMessage(), e);
 
