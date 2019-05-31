@@ -62,8 +62,6 @@ public class Consumer implements Runnable{
 				if(this.getStore().getIpPortQueue().size() > 0) {
 					logger.info("Before consume: "+ this.getStore().getIpPortQueue().size());
 					
-					if(this.getStore().getIpPortQueue().size() < 10 ) this.getStore().notifyAll();
-					
 					try {
 						HttpResponse response = service.doVote(ipInfo);
 
@@ -109,8 +107,8 @@ public class Consumer implements Runnable{
 						logger.error(e.getMessage(), e);
 					}
 				}
-
-				this.getStore().notifyAll();
+				
+				if(this.getStore().getIpPortQueue().size() < 10 ) this.getStore().notifyAll();
 			}
 			
 			try {
