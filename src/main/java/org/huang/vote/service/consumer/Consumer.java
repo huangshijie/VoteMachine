@@ -2,7 +2,6 @@ package org.huang.vote.service.consumer;
 
 import java.io.IOException;
 
-import org.apache.http.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfo;
@@ -81,7 +80,6 @@ public class Consumer implements Runnable {
 									logger.info("After consume: " + this.getStore().getIpPortQueue().size());
 								}
 							}
-							logger.info(result);
 						} else {
 							
 							throw new RuntimeException("HTTP Base Service Error");
