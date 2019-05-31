@@ -30,10 +30,10 @@ public abstract class HttpBaseService implements BaseService {
 	
 	private static final Logger logger = LogManager.getLogger(HttpBaseService.class);
 	
-	public HttpResponse doPostWithForm(String url, Map<String, String> headers, IPInfo ipInfo,
+	public String doPostWithForm(String url, Map<String, String> headers, IPInfo ipInfo,
 			List<NameValuePair> params) {
 		
-		HttpResponse result = null;
+		String result = null;
 		
 		try ( 
 				CloseableHttpClient httpClient = HttpClients.createDefault() 
@@ -59,18 +59,18 @@ public abstract class HttpBaseService implements BaseService {
 				httpPost.setConfig(requestConfig);
 			}
 		
-			result = httpClient.execute(httpPost);
+			HttpResponse rep = httpClient.execute(httpPost);
+			HttpEntity entity = rep.getEntity();
+			if(entity != null) {
+				result = EntityUtils.toString(entity, "utf-8");
+			}
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(), e);
 		}
 		
 		return result;
 	}
-
-	// private HttpResponse doPost(String url) {
-	// return null;
-	// }
 
 	public static String getHmacSHA1(String password, String loginname, String algorithm) {
 

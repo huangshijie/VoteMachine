@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.message.BasicNameValuePair;
@@ -21,7 +20,7 @@ public class VoteService extends HttpBaseService{
 	
 	private static final String VOTE_DATA = "320000_5ce14aa4ba093d4053485392";
 	
-	public HttpResponse doVote(IPInfo ipInfo) throws ParseException, IOException {
+	public String doVote(IPInfo ipInfo) throws ParseException, IOException {
 		
 	    String accept = "*/*";
 	    String baseUrl = "http://op.lottery.gov.cn/";
