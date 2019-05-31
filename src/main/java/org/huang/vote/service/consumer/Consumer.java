@@ -93,7 +93,7 @@ public class Consumer implements Runnable {
 							do {
 								logger.info("Before Exception change ip: " + this.getStore().getIpPortQueue().size());
 
-								if (this.getStore().getIpPortQueue().size() <= 0) {
+								if (this.getStore().getIpPortQueue().size() <= 1) {
 									logger.info("IPInfo's ip store is too small");
 									this.getStore().notifyAll();
 									break;
