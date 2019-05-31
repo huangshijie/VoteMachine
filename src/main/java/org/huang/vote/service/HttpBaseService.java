@@ -14,7 +14,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,32 +31,39 @@ public abstract class HttpBaseService implements BaseService {
 	private static final Logger logger = LogManager.getLogger(HttpBaseService.class);
 	
 	public HttpResponse doPostWithForm(String url, Map<String, String> headers, IPInfo ipInfo,
-			List<NameValuePair> params) throws ClientProtocolException, IOException {
-
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-
-		HttpPost httpPost = new HttpPost(url);
-
-		if (headers != null) {
-			for (String key : headers.keySet()) {
-				httpPost.addHeader(key, headers.get(key));
+			List<NameValuePair> params) {
+		
+		HttpResponse result = null;
+		
+		try ( CloseableHttpClient httpClient = HttpClients.createDefault() ){
+			HttpPost httpPost = new HttpPost(url);
+	
+			if (headers != null) {
+				for (String key : headers.keySet()) {
+					httpPost.addHeader(key, headers.get(key));
+				}
 			}
+	
+			if (params != null) {
+				UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(params, "utf-8");
+	
+				httpPost.setEntity(formEntity);
+			}
+	
+			if (ipInfo != null) {
+				HttpHost proxy = new HttpHost(ipInfo.getIp(), ipInfo.getPort());
+				RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).setConnectTimeout(10000)
+						.setSocketTimeout(10000).setConnectionRequestTimeout(3000).build();
+				httpPost.setConfig(requestConfig);
+			}
+		
+			result = httpClient.execute(httpPost);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		if (params != null) {
-			UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(params, "utf-8");
-
-			httpPost.setEntity(formEntity);
-		}
-
-		if (ipInfo != null) {
-			HttpHost proxy = new HttpHost(ipInfo.getIp(), ipInfo.getPort());
-			RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).setConnectTimeout(10000)
-					.setSocketTimeout(10000).setConnectionRequestTimeout(3000).build();
-			httpPost.setConfig(requestConfig);
-		}
-
-		return httpClient.execute(httpPost);
+		
+		return result;
 	}
 
 	// private HttpResponse doPost(String url) {
