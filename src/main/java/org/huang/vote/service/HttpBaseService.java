@@ -35,7 +35,9 @@ public abstract class HttpBaseService implements BaseService {
 		
 		HttpResponse result = null;
 		
-		try ( CloseableHttpClient httpClient = HttpClients.createDefault() ){
+		try ( 
+				CloseableHttpClient httpClient = HttpClients.createDefault() 
+			){
 			HttpPost httpPost = new HttpPost(url);
 	
 			if (headers != null) {
@@ -60,7 +62,7 @@ public abstract class HttpBaseService implements BaseService {
 			result = httpClient.execute(httpPost);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		
 		return result;
