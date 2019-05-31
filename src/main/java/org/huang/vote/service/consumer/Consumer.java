@@ -108,7 +108,7 @@ public class Consumer implements Runnable{
 					}
 				}
 				
-				if(this.getStore().getIpPortQueue().size() < 10 ) this.getStore().notifyAll();
+				if(this.getStore().getIpPortQueue().size() < 5 ) this.getStore().notifyAll();
 			}
 			
 			try {
