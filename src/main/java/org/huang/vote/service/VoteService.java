@@ -2,7 +2,6 @@ package org.huang.vote.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,11 +26,11 @@ public class VoteService extends HttpBaseService{
 	    String path = "dreamer/dreamerIncrease";
 	    long ts = Math.round(Math.random() * 1e3);
 	    String contentType = "application/x-www-form-urlencoded";
-	    String timestamp = String.valueOf(Math.round((new Date()).getTime() / 1e3));
+	    String timestamp = String.valueOf(Math.round(System.currentTimeMillis() / 1e3));
 	    String str = "POST\n" + accept + "\n" + contentType + "\n" + timestamp + "\n" + timestamp + ts + "\n/" + path;
 	    String encrypted = getHmacSHA1(SECRET_CODE, str, ENCODE_METHOD); 
 	    String authHeader = "Dataplus " + SECRET_ID + ":" + encrypted;
-	    String url = baseUrl + path + "?v=" + (new Date()).getTime();
+	    String url = baseUrl + path + "?v=" + System.currentTimeMillis();
 	    
 	    HashMap<String, String> headers = new HashMap<>();
 	    
