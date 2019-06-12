@@ -35,7 +35,6 @@ Configuration:
       level: info
       AppenderRef:
         - ref: INFOFILE
-        - ref: CONSOLE
         - ref: FATALFILE
     logger:
       name: EventLogger
@@ -43,5 +42,4 @@ Configuration:
       additivity: true
       AppenderRef:
         - ref: INFOFILE
-        - ref: CONSOLE
         - ref: FATALFILE
