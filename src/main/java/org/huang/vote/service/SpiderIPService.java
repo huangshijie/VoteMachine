@@ -90,8 +90,6 @@ public class SpiderIPService extends HttpBaseService{
             }
         }
         logger.info("xiciIP -> IpPortQueue's size is: "+store.getIpPortQueue().size());
-		
-		logger.info(content);
 	}
 	
 	public static void main(String[] args) {

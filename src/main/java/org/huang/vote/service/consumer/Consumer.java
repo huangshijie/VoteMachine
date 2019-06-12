@@ -1,6 +1,7 @@
 package org.huang.vote.service.consumer;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,8 @@ import org.json.JSONObject;
 public class Consumer implements Runnable {
 
 	private static final Logger logger = LogManager.getLogger(Consumer.class);
+	
+	private static AtomicInteger SUCCESSNUM;
 
 	private VoteService service;
 	private volatile IPInfoStore store;
@@ -78,7 +81,7 @@ public class Consumer implements Runnable {
 								} while (!UtilsService.isValidIpPort(ipInfo));
 								logger.info("After consume: " + this.getStore().getIpPortQueue().size());
 							} else {
-								logger.fatal("Seccuss vote");
+								logger.fatal("Seccuss vote and current total number is " + SUCCESSNUM.incrementAndGet());
 							}
 						} else {
 							
@@ -106,7 +109,7 @@ public class Consumer implements Runnable {
 			}
 
 			try {
-				Thread.sleep(1000 * 30);
+				Thread.sleep(1000 * 15);
 			} catch (InterruptedException e) {
 				logger.error(e.getMessage(), e);
 			}
