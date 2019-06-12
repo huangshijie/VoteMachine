@@ -1,13 +1,13 @@
 package org.huang.vote.model;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class IPInfoStore {
 	
-	private Queue<IPInfo> ipPortQueue = new LinkedList<IPInfo>();
+	private BlockingQueue<IPInfo> ipPortQueue = new ArrayBlockingQueue<IPInfo>(50);
 
-	public Queue<IPInfo> getIpPortQueue() {
+	public BlockingQueue<IPInfo> getIpPortQueue() {
 		return ipPortQueue;
 	}
 }

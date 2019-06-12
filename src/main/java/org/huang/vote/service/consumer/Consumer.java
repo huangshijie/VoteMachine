@@ -66,19 +66,19 @@ public class Consumer implements Runnable {
 							JSONObject o = new JSONObject(result);
 							int status = o.getInt("status");
 							if (200 != status) {
-								synchronized (this) {
-									do {
-										logger.info("Before Consume change ip: " + this.getStore().getIpPortQueue().size());
+								do {
+									logger.info("Before Consume change ip: " + this.getStore().getIpPortQueue().size());
 
-										if (this.getStore().getIpPortQueue().size() <= 1) {
-											logger.info("IPInfo's ip store is too small");
-											this.getStore().notifyAll();
-											break;
-										}
-										this.ipInfo = this.getStore().getIpPortQueue().poll();
-									} while (!UtilsService.isValidIpPort(ipInfo));
-									logger.info("After consume: " + this.getStore().getIpPortQueue().size());
-								}
+									if (this.getStore().getIpPortQueue().size() <= 1) {
+										logger.info("IPInfo's ip store is too small");
+										this.getStore().notifyAll();
+										break;
+									}
+									this.ipInfo = this.getStore().getIpPortQueue().poll();
+								} while (!UtilsService.isValidIpPort(ipInfo));
+								logger.info("After consume: " + this.getStore().getIpPortQueue().size());
+							} else {
+								logger.fatal("Seccuss vote");
 							}
 						} else {
 							
@@ -89,20 +89,18 @@ public class Consumer implements Runnable {
 
 						logger.error(e.getMessage(), e);
 
-						synchronized (this) {
-							do {
-								logger.info("Before Exception change ip: " + this.getStore().getIpPortQueue().size());
+						do {
+							logger.info("Before Exception change ip: " + this.getStore().getIpPortQueue().size());
 
-								if (this.getStore().getIpPortQueue().size() <= 1) {
-									logger.info("IPInfo's ip store is too small");
-									this.getStore().notifyAll();
-									break;
-								}
+							if (this.getStore().getIpPortQueue().size() <= 1) {
+								logger.info("IPInfo's ip store is too small");
+								this.getStore().notifyAll();
+								break;
+							}
 
-								this.ipInfo = this.getStore().getIpPortQueue().poll();
-							} while (!UtilsService.isValidIpPort(ipInfo));
-							logger.info("Exception After consume: " + this.getStore().getIpPortQueue().size());
-						}
+							this.ipInfo = this.getStore().getIpPortQueue().poll();
+						} while (!UtilsService.isValidIpPort(ipInfo));
+						logger.info("Exception After consume: " + this.getStore().getIpPortQueue().size());
 					}
 				}
 			}

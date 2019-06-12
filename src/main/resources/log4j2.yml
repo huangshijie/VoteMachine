@@ -3,33 +3,45 @@ Configuration:
   name: YAMLConfigTest
   properties:
     property:
-      name: filename
-      value: target/test-yaml.log
+      - name: infofilename
+        value: target/logs-info.log
+      - name: fatalfilename
+        value: target/logs-fatal.log
   thresholdFilter:
     level: info
   appenders:
     Console:
-      name: STDOUT
+      name: CONSOLE
+      target: SYSTEM_OUT
       PatternLayout:
-        Pattern: "%m%n"
+        Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%X{X-B3-TraceId}, %X{X-B3-SpanId}] [%c]-[%p] %m%n"
     File:
-      name: File
-      fileName: ${filename}
-      PatternLayout:
-        Pattern: "%d %p %C{1.} [%t] %m%n"
-      Filters:
-        ThresholdFilter:
-          level: info
- 
+      - name: INFOFILE
+        fileName: ${infofilename}
+        PatternLayout:
+          Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%X{X-B3-TraceId}, %X{X-B3-SpanId}] [%c]-[%p] %m%n"
+        Filters:
+          ThresholdFilter:
+            level: info
+      - name: FATALFILE
+        fileName: ${fatalfilename}
+        PatternLayout: 
+          Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%X{X-B3-TraceId}, %X{X-B3-SpanId}] [%c]-[%p] %m%n"
+        Filters:
+          ThresholdFilter:
+            level: fatal
   Loggers:
+    Root: 
+      level: info
+      AppenderRef:
+        - ref: INFOFILE
+        - ref: CONSOLE
+        - ref: FATALFILE
     logger:
       name: EventLogger
       level: info
       additivity: true
       AppenderRef:
-        ref: File
-
-    Root:
-      level: info
-      AppenderRef:
-        ref: File
+        - ref: INFOFILE
+        - ref: CONSOLE
+        - ref: FATALFILE
