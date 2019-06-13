@@ -14,7 +14,7 @@ public class Consumer implements Runnable {
 
 	private static final Logger logger = LogManager.getLogger(Consumer.class);
 	
-	private static AtomicInteger SUCCESSNUM;
+	private static AtomicInteger SUCCESSNUM = new AtomicInteger(0);
 
 	private VoteService service;
 	private volatile IPInfoStore store;
