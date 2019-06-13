@@ -87,7 +87,7 @@ public class Consumer implements Runnable {
 							} else {
 								logger.fatal("Seccuss vote and current total number is " + SUCCESSNUM.incrementAndGet());
 								try {
-									Thread.sleep(1000 * 15);
+									Thread.sleep(1000 * 20);
 								} catch (InterruptedException e) {
 									logger.error(e.getMessage(), e);
 								}
