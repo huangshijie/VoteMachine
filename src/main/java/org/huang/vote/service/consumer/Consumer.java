@@ -51,7 +51,6 @@ public class Consumer implements Runnable {
 					try {
 						logger.info("Consumer wait...");
 						this.getStore().wait();
-						this.getStore().notifyAll();
 						logger.info("Consumer waking...");
 					} catch (InterruptedException e) {
 						logger.error(e.getMessage(), e);
@@ -59,6 +58,8 @@ public class Consumer implements Runnable {
 				}
 				logger.info("Before consume: " + this.getStore().getIpPortQueue().size());
 				this.ipInfo = this.getStore().getIpPortQueue().poll();
+				
+				this.getStore().notifyAll();
 			}
 
 			if (this.ipInfo != null) {
