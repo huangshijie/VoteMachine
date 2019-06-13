@@ -26,5 +26,10 @@ public class IPInfo {
 		this.ip = ip;
 		this.port = port;
 	}
+	
+	@Override
+	public String toString(){
+		return this.ip + ":" + this.port;
+	}
 
 }

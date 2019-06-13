@@ -24,6 +24,10 @@ public class App {
     	Thread conThread = new Thread(consumer, "Consumer");
     	conThread.start();
     	
+//    	Consumer consumer2 = new Consumer(vService, store);
+//    	Thread conThread2 = new Thread(consumer2, "Consumer2");
+//    	conThread2.start();
+    	
     	Producer producer = new Producer(sService);
     	Thread proThread = new Thread(producer, "Producer");
     	proThread.start();

@@ -14,19 +14,19 @@ Configuration:
       name: CONSOLE
       target: SYSTEM_OUT
       PatternLayout:
-        Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%X{X-B3-TraceId}, %X{X-B3-SpanId}] [%c]-[%p] %m%n"
+        Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c]-[%p] %m%n"
     File:
       - name: INFOFILE
         fileName: ${infofilename}
         PatternLayout:
-          Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%X{X-B3-TraceId}, %X{X-B3-SpanId}] [%c]-[%p] %m%n"
+          Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c]-[%p] %m%n"
         Filters:
           ThresholdFilter:
             level: info
       - name: FATALFILE
         fileName: ${fatalfilename}
         PatternLayout: 
-          Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%X{X-B3-TraceId}, %X{X-B3-SpanId}] [%c]-[%p] %m%n"
+          Pattern: "%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c]-[%p] %m%n"
         Filters:
           ThresholdFilter:
             level: fatal
@@ -36,6 +36,7 @@ Configuration:
       AppenderRef:
         - ref: INFOFILE
         - ref: FATALFILE
+        - ref: CONSOLE
     logger:
       name: EventLogger
       level: info

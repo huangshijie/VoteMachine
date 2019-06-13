@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.huang.vote.model.IPInfo;
 import org.huang.vote.model.IPInfoStore;
-import org.huang.vote.service.UtilsService;
 import org.huang.vote.service.VoteService;
 import org.json.JSONObject;
 
@@ -45,6 +44,8 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
+			
+			this.ipInfo = this.getStore().getIpPortQueue().poll();
 
 			synchronized (this.getStore()) {
 				if (this.getStore().getIpPortQueue().size() == 0) {
@@ -57,9 +58,14 @@ public class Consumer implements Runnable {
 						logger.error(e.getMessage(), e);
 					}
 				}
+				
+				this.ipInfo = this.getStore().getIpPortQueue().poll();
+			}
 
-				if (this.getStore().getIpPortQueue().size() > 0) {
+			if (this.ipInfo != null) {
+				while(true) {
 					logger.info("Before consume: " + this.getStore().getIpPortQueue().size());
+					logger.info("Use ip port info: " + this.ipInfo.toString());
 
 					try {
 						String result = service.doVote(ipInfo);
@@ -69,41 +75,18 @@ public class Consumer implements Runnable {
 							JSONObject o = new JSONObject(result);
 							int status = o.getInt("status");
 							if (200 != status) {
-								do {
-									logger.info("Before Consume change ip: " + this.getStore().getIpPortQueue().size());
-
-									if (this.getStore().getIpPortQueue().size() <= 1) {
-										logger.info("IPInfo's ip store is too small");
-										this.getStore().notifyAll();
-										break;
-									}
-									this.ipInfo = this.getStore().getIpPortQueue().poll();
-								} while (!UtilsService.isValidIpPort(ipInfo));
-								logger.info("After consume: " + this.getStore().getIpPortQueue().size());
+								logger.info("This ip port info cannot be used any more: " + this.ipInfo.toString());
+								break;
 							} else {
 								logger.fatal("Seccuss vote and current total number is " + SUCCESSNUM.incrementAndGet());
 							}
 						} else {
-							
 							throw new RuntimeException("HTTP Base Service Error");
-							
 						}
-					} catch (RuntimeException | IOException e) {
-
+					} catch (RuntimeException | IOException e ) {
+						logger.info("While use this ip port info face exception: " + this.ipInfo.toString());
 						logger.error(e.getMessage(), e);
-
-						do {
-							logger.info("Before Exception change ip: " + this.getStore().getIpPortQueue().size());
-
-							if (this.getStore().getIpPortQueue().size() <= 1) {
-								logger.info("IPInfo's ip store is too small");
-								this.getStore().notifyAll();
-								break;
-							}
-
-							this.ipInfo = this.getStore().getIpPortQueue().poll();
-						} while (!UtilsService.isValidIpPort(ipInfo));
-						logger.info("Exception After consume: " + this.getStore().getIpPortQueue().size());
+						break;
 					}
 				}
 			}
