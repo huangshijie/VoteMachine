@@ -21,12 +21,12 @@ public class App {
     	VoteService vService = new VoteService();
     	
     	Consumer consumer = new Consumer(vService, store);
-    	Thread conThread = new Thread(consumer, "Consumer");
+    	Thread conThread = new Thread(consumer, "Consumer-1");
     	conThread.start();
     	
-//    	Consumer consumer2 = new Consumer(vService, store);
-//    	Thread conThread2 = new Thread(consumer2, "Consumer2");
-//    	conThread2.start();
+    	Consumer consumer2 = new Consumer(vService, store);
+    	Thread conThread2 = new Thread(consumer2, "Consumer-2");
+    	conThread2.start();
     	
     	Producer producer = new Producer(sService);
     	Thread proThread = new Thread(producer, "Producer");

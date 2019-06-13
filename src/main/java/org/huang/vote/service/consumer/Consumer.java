@@ -87,6 +87,11 @@ public class Consumer implements Runnable {
 								break;
 							} else {
 								logger.fatal("Seccuss vote and current total number is " + SUCCESSNUM.incrementAndGet());
+								try {
+									Thread.sleep(1000 * 15);
+								} catch (InterruptedException e) {
+									logger.error(e.getMessage(), e);
+								}
 							}
 						} else {
 							throw new RuntimeException("HTTP Base Service Error");
@@ -98,13 +103,6 @@ public class Consumer implements Runnable {
 					}
 				}
 			}
-
-			try {
-				Thread.sleep(1000 * 15);
-			} catch (InterruptedException e) {
-				logger.error(e.getMessage(), e);
-			}
 		}
 	}
-
 }
