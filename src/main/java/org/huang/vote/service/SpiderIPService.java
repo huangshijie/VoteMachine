@@ -77,6 +77,7 @@ public class SpiderIPService extends HttpBaseService{
                 if (store.getIpPortQueue().size() >= 20) {
                     logger.info("xiciIP producer wait...");
                     try {
+                    	store.notifyAll();
                     	store.wait(); // the wait must in synchronized code
                         logger.info("xiciIP producer waking...");
                     } catch (InterruptedException e) {

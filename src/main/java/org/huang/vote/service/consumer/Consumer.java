@@ -19,7 +19,6 @@ public class Consumer implements Runnable {
 	private VoteService service;
 	private volatile IPInfoStore store;
 	private IPInfo ipInfo;
-	private int queueSize;
 	
 	public VoteService getService() {
 		return service;
@@ -37,14 +36,6 @@ public class Consumer implements Runnable {
 		this.store = store;
 	}
 
-	public int getQueueSize() {
-		return queueSize;
-	}
-
-	public void setQueueSize(int queueSize) {
-		this.queueSize = queueSize;
-	}
-
 	public Consumer(VoteService service, IPInfoStore store) {
 		this.service = service;
 		this.store = store;
@@ -60,14 +51,14 @@ public class Consumer implements Runnable {
 					try {
 						logger.info("Consumer wait...");
 						this.getStore().wait();
+						this.getStore().notifyAll();
 						logger.info("Consumer waking...");
 					} catch (InterruptedException e) {
 						logger.error(e.getMessage(), e);
 					}
 				}
-				logger.info("Before consume: " + this.queueSize);
+				logger.info("Before consume: " + this.getStore().getIpPortQueue().size());
 				this.ipInfo = this.getStore().getIpPortQueue().poll();
-				this.queueSize = this.getStore().getIpPortQueue().size();
 			}
 
 			if (this.ipInfo != null) {
