@@ -65,14 +65,13 @@ public class Consumer implements Runnable {
 						logger.error(e.getMessage(), e);
 					}
 				}
-				
+				logger.info("Before consume: " + this.queueSize);
 				this.ipInfo = this.getStore().getIpPortQueue().poll();
 				this.queueSize = this.getStore().getIpPortQueue().size();
 			}
 
 			if (this.ipInfo != null) {
 				while(true) {
-					logger.info("Before consume: " + this.queueSize);
 					logger.info("Use ip port info: " + this.ipInfo.toString());
 
 					try {
