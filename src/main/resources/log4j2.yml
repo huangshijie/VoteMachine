@@ -36,7 +36,7 @@ Configuration:
       AppenderRef:
         - ref: INFOFILE
         - ref: FATALFILE
-        - ref: CONSOLE
+
     logger:
       name: EventLogger
       level: info
